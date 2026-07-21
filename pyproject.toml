@@ -1,0 +1,20 @@
+[project]
+name = "mcp-ollama-client"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+authors = [
+    { name = "Saurav", email = "sauravpunjabi123@gmail.com" }
+]
+requires-python = ">=3.13"
+dependencies = [
+    "fastmcp>=3.4.4",
+    "ollama>=0.6.2",
+]
+
+[project.scripts]
+mcp-ollama-client = "mcp_ollama_client:main"
+
+[build-system]
+requires = ["uv_build>=0.11.29,<0.12.0"]
+build-backend = "uv_build"
