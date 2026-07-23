@@ -3,7 +3,7 @@ import json
 import ollama
 from fastmcp import Client
 
-MCP_URL = "http://localhost:8000/mcp"
+MCP_URL = "https://f1pulse-mcp.onrender.com/mcp"
 MODEL = "llama3.1:8b"
 
 def to_ollama_tools(mcp_tools):
@@ -40,11 +40,17 @@ async def run_turn(client, ollama_tools, messages):
             args = dict(call.function.arguments)
             print(f" -> {name}({args})") #shows the call
             
-            result = await client.call_tool(name, args)
-            data = result.data if result.data is not None else result.content
+            #if the tool fails, tell the model instead of crashing
+            try:
+                result = await client.call_tool(name, args)
+                data = result.data if result.data is not None else result.content
+                content = json.dumps(data, default=str)
+            except Exception as e:
+                content = f"Tool error: {e}"
+                print(f"      ERROR: {e}")
             
             #sends the result back to the model
-            messages.append({"role": "tool", "tool_name": name, "content": json.dumps(data, default=str)})
+            messages.append({"role": "tool", "tool_name": name, "content": content})
     
     return "Too many tool calls, stopping."
         
