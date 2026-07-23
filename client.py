@@ -51,7 +51,7 @@ async def run_turn(client, ollama_tools, messages):
         
         
 async def main():
-    async with Client(MCP_URL) as client:
+    async with Client(MCP_URL, auth="oauth") as client:
         mcp_tools = await client.list_tools()
         ollama_tools = to_ollama_tools(mcp_tools)  # this is to convert once
         print(f"Connected - {len(mcp_tools)} tools. Ask an F1 question (quit to exit. \n)")
